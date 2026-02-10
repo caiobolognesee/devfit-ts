@@ -1,0 +1,16 @@
+services:
+  db:
+    image: postgres:16-alpine
+    container_name: devfit_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: devfit
+      POSTGRES_PASSWORD: devfit
+      POSTGRES_DB: devfit
+    ports:
+      - "5432:5432"
+    volumes:
+      - devfit_pgdata:/var/lib/postgresql/data
+
+volumes:
+  devfit_pgdata:
