@@ -1,5 +1,5 @@
 import readline from "readline"
-import { WorkoutGenerationPolicyService } from "./domain/services/WorkoutGenerationPolicyService"
+import { WorkoutGenerationPolicyService } from "./modules/workouts/workoutGenerationPolicy.service"
 
 const rl = readline.createInterface({
   input: process.stdin,

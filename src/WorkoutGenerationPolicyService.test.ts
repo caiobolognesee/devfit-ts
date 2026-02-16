@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest"
-import { WorkoutGenerationPolicyService } from "./domain/services/WorkoutGenerationPolicyService"
-import { Subscription } from "./domain/Subscription"
+import { WorkoutGenerationPolicyService } from "./modules/workouts/workoutGenerationPolicy.service"
+import { Subscription } from "./modules/Subscriptions.ts/subscription.controller"
 
 describe("WorkoutGenerationPolicyService", () => {
 

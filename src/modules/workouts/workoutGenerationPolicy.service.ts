@@ -1,4 +1,4 @@
-import { Subscription } from "../Subscription"
+import { Subscription } from "../../modules/Subscriptions.ts/subscription.controller"
 
 export type WorkoutGenerationResult = {
   canGenerate: boolean
