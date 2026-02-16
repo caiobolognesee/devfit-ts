@@ -1,8 +1,11 @@
 import Fastify from "fastify";
 import { prisma } from "./db";
+import { userRoutes } from "./modules/users/user.controller";
 
 export function buildApp() {
   const app = Fastify({ logger: true });
+
+  app.register(userRoutes);
 
   app.get("/health", async () => {
     try {
