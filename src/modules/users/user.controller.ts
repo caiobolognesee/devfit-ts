@@ -1,16 +1,14 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { UserRepository } from "./user.repository";
 import { UserService } from "./user.service";
 
-export class UsersController {
+export class UserController {
+  constructor(private userService: UserService) {}
+
   async create(request: FastifyRequest, reply: FastifyReply) {
     try {
       const { name, email, password, timezone } = request.body as any;
 
-      const repository = new UserRepository();
-      const service = new UserService(repository);
-
-      const user = await service.create({
+      const user = await this.userService.create({
         name,
         email,
         password,
