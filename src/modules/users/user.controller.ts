@@ -1,9 +1,9 @@
-import { FastifyInstance } from "fastify";
+import { FastifyReply, FastifyRequest } from "fastify";
 import { UserRepository } from "./user.repository";
 import { UserService } from "./user.service";
 
-export async function userRoutes(app: FastifyInstance) {
-  app.post("/users", async (request, reply) => {
+export class UsersController {
+  async create(request: FastifyRequest, reply: FastifyReply) {
     try {
       const { name, email, password, timezone } = request.body as any;
 
@@ -23,5 +23,5 @@ export async function userRoutes(app: FastifyInstance) {
         message: error.message,
       });
     }
-  });
+  }
 }
