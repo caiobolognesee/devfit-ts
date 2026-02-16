@@ -1,2 +1,8 @@
-# devfit-ts
-DevFit API (TypeScript) — Fastify + PostgreSQL + Prisma + Docker
+# DevFit API (TypeScript)
+
+Backend API for DevFit.
+
+## Running locally
+```bash
+npm install
+npm run dev

@@ -8,9 +8,14 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
+  id        String   @id @default(uuid())
+  name      String
   email     String   @unique
   password  String
+  timezone  String   @default("America/Sao_Paulo")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@map("users")
 }
+
