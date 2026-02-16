@@ -1,13 +1,22 @@
 import { FastifyInstance } from "fastify";
-import { userRoutes } from "./modules/users/user.controller";
+import { container } from "./container";
+import { authMiddleware } from "./middlewares/auth.middleware";
 
 export async function registerRoutes(app: FastifyInstance) {
-  app.register(userRoutes);
+  app.register(async (userApp) => {
+    userApp.post("/", container.userController.create.bind(container.userController));
 
-  app.register(userRoutes, { prefix: "/users" });
+    userApp.get(
+      "/me",
+      { preHandler: authMiddleware },
+      async (request) => {
+        return (request as any).user;
+      }
+    );
 
+  }, { prefix: "/users" });
 
-  // Futuro:
-  // app.register(authRoutes)
-  // app.register(workoutRoutes)
+  app.register(async (authApp) => {
+    authApp.post("/login", container.authController.login.bind(container.authController));
+  }, { prefix: "/auth" });
 }
