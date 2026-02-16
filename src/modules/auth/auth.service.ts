@@ -33,7 +33,7 @@ export class AuthService {
       },
       process.env.JWT_SECRET as string,
       {
-        expiresIn: "1h",
+        expiresIn: "7d",
       }
     );
 
