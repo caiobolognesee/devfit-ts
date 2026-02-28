@@ -2,6 +2,7 @@ import { UserRepository } from "../users/user.repository";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { AppError } from "../../errors/app-error";
+import { env } from "../../config/env";
 
 interface LoginDTO {
   email: string;
@@ -32,9 +33,9 @@ export class AuthService {
         sub: user.id,
         email: user.email,
       },
-      process.env.JWT_SECRET as string,
+      env.JWT_SECRET,
       {
-        expiresIn: "1h",
+        expiresIn: "7d",
       }
     );
 
