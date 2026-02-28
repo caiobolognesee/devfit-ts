@@ -1,6 +1,7 @@
 import { UserRepository } from "../users/user.repository";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { AppError } from "../../errors/app-error";
 
 interface LoginDTO {
   email: string;
@@ -14,7 +15,7 @@ export class AuthService {
     const user = await this.userRepository.findByEmail(data.email);
 
     if (!user) {
-      throw new Error("Invalid credentials");
+      throw new AppError("Invalid credentials", 401, "INVALID_CREDENTIALS");
     }
 
     const passwordMatch = await bcrypt.compare(
@@ -23,7 +24,7 @@ export class AuthService {
     );
 
     if (!passwordMatch) {
-      throw new Error("Invalid credentials");
+      throw new AppError("Invalid credentials", 401, "INVALID_CREDENTIALS");
     }
 
     const token = jwt.sign(
@@ -33,7 +34,7 @@ export class AuthService {
       },
       process.env.JWT_SECRET as string,
       {
-        expiresIn: "7d",
+        expiresIn: "1h",
       }
     );
 

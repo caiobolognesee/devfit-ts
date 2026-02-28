@@ -22,19 +22,14 @@ export async function authMiddleware(
     return reply.status(401).send({ message: "Invalid token format" });
   }
 
-  try {
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET as string
-    ) as JwtPayload;
+  const decoded = jwt.verify(
+    token,
+    process.env.JWT_SECRET as string
+  ) as JwtPayload;
 
-    // adiciona usuário no request
-    (request as any).user = {
-      id: decoded.sub,
-      email: decoded.email,
-    };
-
-  } catch {
-    return reply.status(401).send({ message: "Invalid token" });
-  }
+  // add user in request
+  (request as any).user = {
+    id: decoded.sub,
+    email: decoded.email,
+  };
 }
