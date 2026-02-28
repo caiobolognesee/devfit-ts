@@ -1,5 +1,6 @@
 import { UserRepository } from "./user.repository";
 import bcrypt from "bcrypt";
+import { AppError } from "../../errors/app-error"; // ajuste o path conforme sua pasta
 
 interface CreateUserDTO {
   name: string;
@@ -14,13 +15,21 @@ export class UserService {
   async create(data: CreateUserDTO) {
     // 1️⃣ Validar nome
     if (!data.name || data.name.trim().split(" ").length < 2) {
-      throw new Error("Name must contain at least first and last name");
+      throw new AppError(
+        "Name must contain at least first and last name",
+        400,
+        "INVALID_NAME"
+      );
     }
 
     // 2️⃣ Validar email
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(data.email)) {
-      throw new Error("Invalid email format");
+      throw new AppError(
+        "Invalid email format",
+        400,
+        "INVALID_EMAIL"
+      );
     }
 
     // 3️⃣ Validar senha
@@ -28,8 +37,10 @@ export class UserService {
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
 
     if (!passwordRegex.test(data.password)) {
-      throw new Error(
-        "Password must have 8 characters, uppercase, lowercase, number and symbol"
+      throw new AppError(
+        "Password must have 8 characters, uppercase, lowercase, number and symbol",
+        400,
+        "INVALID_PASSWORD"
       );
     }
 
@@ -37,7 +48,11 @@ export class UserService {
     const existingUser = await this.userRepository.findByEmail(data.email);
 
     if (existingUser) {
-      throw new Error("Email already registered");
+      throw new AppError(
+        "Email already registered",
+        409,
+        "EMAIL_ALREADY_REGISTERED"
+      );
     }
 
     // 5️⃣ Gerar hash

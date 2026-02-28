@@ -1,27 +1,27 @@
-import "dotenv/config";
 import { buildApp } from "./app";
 import { prisma } from "./db";
 
-const app = buildApp();
+async function main() {
+  const app = await buildApp();
 
-const port = Number(process.env.PORT ?? 3000);
-const host = process.env.HOST ?? "0.0.0.0";
+  const closeGracefully = async () => {
+    try {
+      await app.close();
+      await prisma.$disconnect();
+      process.exit(0);
+    } catch (err) {
+      console.error(err);
+      process.exit(1);
+    }
+  };
 
-async function start() {
-  await app.listen({ port, host });
+  process.on("SIGINT", closeGracefully);
+  process.on("SIGTERM", closeGracefully);
+
+  await app.listen({ port: 3000, host: "0.0.0.0" });
 }
 
-async function shutdown(signal: string) {
-  app.log.info({ signal }, "Shutting down...");
-  await app.close();
-  await prisma.$disconnect();
-  process.exit(0);
-}
-
-process.on("SIGINT", () => shutdown("SIGINT"));
-process.on("SIGTERM", () => shutdown("SIGTERM"));
-
-start().catch((err) => {
-  app.log.error(err);
+main().catch((err) => {
+  console.error(err);
   process.exit(1);
 });

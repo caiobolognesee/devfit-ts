@@ -17,5 +17,5 @@ export async function registerRoutes(app: FastifyInstance) {
 
   }, { prefix: "/users" });
 
-  app.post("/auth/login", { schema: loginBodyJsonSchema }, authController.login.bind(authController));
+  app.post("/auth/login", container.authController.login.bind(container.authController));
 }

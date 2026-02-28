@@ -1,12 +1,13 @@
 import { FastifyReply, FastifyRequest } from "fastify";
-import { container } from "../../container";
-import { loginBodySchema } from "./auth.schemas";
+import { AuthService } from "./auth.service";
 
 export class AuthController {
-  async login(request: FastifyRequest, reply: FastifyReply) {
-    const body = loginBodySchema.parse(request.body);
+  constructor(private readonly authService: AuthService) {}
 
-    const { accessToken } = await container.authService.login(body);
+  async login(request: FastifyRequest, reply: FastifyReply) {
+    const { email, password } = request.body as any; // depois a gente troca pelo Zod
+
+    const { accessToken } = await this.authService.login({ email, password });
     return reply.send({ accessToken });
   }
 }
