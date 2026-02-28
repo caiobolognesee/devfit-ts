@@ -1,6 +1,7 @@
 import { FastifyInstance } from "fastify";
 import { container } from "./container";
 import { authMiddleware } from "./middlewares/auth.middleware";
+import { loginBodyJsonSchema } from "./modules/auth/auth.schemas";
 
 export async function registerRoutes(app: FastifyInstance) {
   app.register(async (userApp) => {
@@ -16,7 +17,5 @@ export async function registerRoutes(app: FastifyInstance) {
 
   }, { prefix: "/users" });
 
-  app.register(async (authApp) => {
-    authApp.post("/login", container.authController.login.bind(container.authController));
-  }, { prefix: "/auth" });
+  app.post("/auth/login", { schema: loginBodyJsonSchema }, authController.login.bind(authController));
 }
